@@ -1,44 +1,171 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-
-const Container = styled.div`
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-`;
+import {
+  Container,
+  TextField,
+  Button,
+  MenuItem,
+  Box,
+  Typography
+} from '@mui/material';
+import anime from 'animejs';
 
 const SignupPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    phoneNumber: '',
+    age: '',
+    salary: '',
+    jobRole: '',
+    companyName: ''
+  });
+  
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Form data:', formData);
     navigate('/');
   };
 
+  // Animation on mount
+  React.useEffect(() => {
+    anime({
+      targets: '#signup-form',
+      opacity: [0, 1],
+      translateY: [-20, 0],
+      duration: 1000,
+      easing: 'easeOutQuad'
+    });
+  }, []);
+
   return (
-    <Container>
-      <h2>Signup</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Signup</button>
-      </form>
+    <Container maxWidth="sm" style={{ marginTop: '50px' }}>
+      <Box
+        id="signup-form"
+        sx={{
+          p: 4,
+          bgcolor: 'background.paper',
+          boxShadow: 1,
+          borderRadius: 2,
+        }}
+      >
+        <Typography variant="h4" component="h2" gutterBottom>
+          Signup
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="First Name"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Last Name"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Username"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Phone Number"
+            name="phoneNumber"
+            type="tel"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Age"
+            name="age"
+            type="number"
+            value={formData.age}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Salary"
+            name="salary"
+            type="number"
+            value={formData.salary}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            select
+            fullWidth
+            margin="normal"
+            label="Job Role"
+            name="jobRole"
+            value={formData.jobRole}
+            onChange={handleChange}
+            required
+          >
+            <MenuItem value="Developer">Developer</MenuItem>
+            <MenuItem value="Designer">Designer</MenuItem>
+            <MenuItem value="Manager">Manager</MenuItem>
+            <MenuItem value="Analyst">Analyst</MenuItem>
+          </TextField>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Company Name"
+            name="companyName"
+            value={formData.companyName}
+            onChange={handleChange}
+            required
+          />
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            type="submit"
+            sx={{ mt: 3 }}
+          >
+            Signup
+          </Button>
+        </form>
+      </Box>
     </Container>
   );
 };
