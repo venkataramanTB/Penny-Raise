@@ -1,16 +1,38 @@
-import { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import TransactionPage from './pages/TransactionPage';
+import BalancePage from './pages/BalancePage';
+import AddMoneyPage from './pages/AddMoneyPage';
+import AddTransactionPage from './pages/AddTransactionPage';
+import DashboardPage from './pages/DashboardPage';
+import ProfilePage from './pages/ProfilePage';
+import BadgesPage from './pages/BadgesPage';
+import { AuthProvider } from './context/AuthContext';
+import { TransactionProvider } from './context/TransactionContext';
+import GlobalStyles from './styles/globalStyles';
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return(
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </Router>
+  return (
+    <AuthProvider>
+      <TransactionProvider>
+        <GlobalStyles />
+        <Router>
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/transactions" element={<TransactionPage />} />
+            <Route path="/balance" element={<BalancePage />} />
+            <Route path="/add-money" element={<AddMoneyPage />} />
+            <Route path="/add-transaction" element={<AddTransactionPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/badges" element={<BadgesPage />} />
+          </Routes>
+        </Router>
+      </TransactionProvider>
+    </AuthProvider>
   );
 }
 

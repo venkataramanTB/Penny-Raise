@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Transaction from './Transaction.jsx';
+import { Link } from 'react-router-dom';
+import Transaction from './Transaction';
 import Balance from './Balance';
 
 const Home = () => {
