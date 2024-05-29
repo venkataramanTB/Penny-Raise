@@ -9,6 +9,7 @@ import AddTransactionPage from './pages/AddTransactionPage';
 import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import BadgesPage from './pages/BadgesPage';
+import Navbar from './components/Navbar.jsx'; // Import Navbar component
 import { AuthProvider } from './context/AuthContext';
 import { TransactionProvider } from './context/TransactionContext';
 import GlobalStyles from './styles/globalStyles';
@@ -19,6 +20,7 @@ function App() {
       <TransactionProvider>
         <GlobalStyles />
         <Router>
+          <Navbar /> {/* Include Navbar component here */}
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
