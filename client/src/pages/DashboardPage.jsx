@@ -8,6 +8,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import PersonIcon from '@mui/icons-material/Person';
 import BadgeIcon from '@mui/icons-material/Badge';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import anime from 'animejs/lib/anime.es.js'; // Import anime.js
 
 const Container = styled.div`
   max-width: 600px;
@@ -21,64 +22,85 @@ const Container = styled.div`
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
-  transition: color 0.3s, transform 0.3s;
+`;
+
+const NeonOutlineIcon = styled(ListItemIcon)`
+  svg {
+    stroke: transparent;
+    transition: stroke 0.3s;
+  }
 
   &:hover {
-    color: #3498db;
-    transform: translateX(5px);
+    svg {
+      stroke: #ff00ff; /* Neon color */
+      stroke-width: 2px; /* Neon thickness */
+      stroke-linecap: round; /* Rounded ends */
+      stroke-linejoin: round; /* Rounded corners */
+    }
+    transform: scale(1.1); /* Zoom in effect on hover */
   }
 `;
 
 const DashboardPage = () => {
+  // Function to handle click animation
+  const handleClick = () => {
+    anime({
+      targets: '.menu-item',
+      scale: [1, 0.5], // Zoom out animation
+      duration: 500,
+      easing: 'easeInOutQuad',
+    });
+  };
+
   return (
     <Container>
       <h2>Dashboard</h2>
       <List>
         <StyledLink to="/transactions">
-          <ListItem button>
-            <ListItemIcon>
+          <ListItem button className="menu-item" onClick={handleClick}>
+            <NeonOutlineIcon>
               <CompareArrowsIcon />
-            </ListItemIcon>
+            </NeonOutlineIcon>
             <ListItemText primary="View Transactions" />
           </ListItem>
         </StyledLink>
         <StyledLink to="/balance">
-          <ListItem button>
-            <ListItemIcon>
+          <ListItem button className="menu-item" onClick={handleClick}>
+            <NeonOutlineIcon>
               <AccountBalanceWalletIcon />
-            </ListItemIcon>
+            </NeonOutlineIcon>
             <ListItemText primary="Check Balance" />
           </ListItem>
         </StyledLink>
         <StyledLink to="/add-money">
-          <ListItem button>
-            <ListItemIcon>
+          <ListItem button className="menu-item" onClick={handleClick}>
+            <NeonOutlineIcon>
               <AttachMoneyIcon />
-            </ListItemIcon>
+            </NeonOutlineIcon>
             <ListItemText primary="Add Money" />
           </ListItem>
         </StyledLink>
         <StyledLink to="/add-transaction">
-          <ListItem button>
-            <ListItemIcon>
+          <ListItem button className="menu-item" onClick={handleClick}>
+            <NeonOutlineIcon>
               <AddBoxIcon />
-            </ListItemIcon>
+            </NeonOutlineIcon>
             <ListItemText primary="Add Transaction" />
           </ListItem>
         </StyledLink>
         <StyledLink to="/profile">
-          <ListItem button>
-            <ListItemIcon>
+          <ListItem button className="menu-item" onClick={handleClick}>
+            <NeonOutlineIcon>
               <PersonIcon />
-            </ListItemIcon>
+            </NeonOutlineIcon>
             <ListItemText primary="View Profile" />
           </ListItem>
         </StyledLink>
         <StyledLink to="/badges">
-          <ListItem button>
-            <ListItemIcon>
+          <ListItem button className="menu-item" onClick={handleClick}>
+            <NeonOutlineIcon>
               <BadgeIcon />
-            </ListItemIcon>
+            </NeonOutlineIcon>
             <ListItemText primary="View Badges" />
           </ListItem>
         </StyledLink>
