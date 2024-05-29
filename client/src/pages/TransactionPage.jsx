@@ -1,25 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-
-const Container = styled.div`
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-`;
-
-const TransactionList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`;
-
-const TransactionItem = styled.li`
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-`;
+import { Container, Typography, List, ListItem, Divider, Paper } from '@mui/material';
 
 const TransactionPage = () => {
   const [transactions, setTransactions] = useState([]);
@@ -33,15 +13,25 @@ const TransactionPage = () => {
   }, []);
 
   return (
-    <Container>
-      <h2>Transactions</h2>
-      <TransactionList>
-        {transactions.map((transaction, index) => (
-          <TransactionItem key={index}>
-            {transaction.description}: ${transaction.amount}
-          </TransactionItem>
-        ))}
-      </TransactionList>
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Typography variant="h4" align="center" gutterBottom>
+        Transactions
+      </Typography>
+      <Paper elevation={3} sx={{ borderRadius: '10px' }}>
+        <List>
+          {transactions.map((transaction, index) => (
+            <React.Fragment key={index}>
+              <ListItem>
+                <Typography variant="subtitle1">{transaction.description}</Typography>
+                <Typography variant="subtitle1" sx={{ ml: 'auto' }}>
+                  ${transaction.amount}
+                </Typography>
+              </ListItem>
+              {index !== transactions.length - 1 && <Divider />}
+            </React.Fragment>
+          ))}
+        </List>
+      </Paper>
     </Container>
   );
 };
