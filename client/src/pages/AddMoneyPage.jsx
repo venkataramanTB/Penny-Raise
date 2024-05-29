@@ -38,5 +38,4 @@ const AddMoneyPage = () => {
     </Container>
   );
 };
-
 export default AddMoneyPage;

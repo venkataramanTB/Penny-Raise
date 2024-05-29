@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -10,6 +10,25 @@ const Container = styled.div`
   background: white;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+`;
+
+const SignupLink = styled.div`
+  margin-top: 20px;
+  text-align: center;
+  color: #3498db;
+
+  a {
+    color: #3498db;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
 `;
 
 const LoginPage = () => {
@@ -58,8 +77,11 @@ const LoginPage = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Login</button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
       </form>
+      <SignupLink>
+        <p>Don't have an account? <Link to="/signup">Signup</Link></p>
+      </SignupLink>
     </Container>
   );
 };
