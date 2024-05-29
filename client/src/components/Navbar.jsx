@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { Logout } from '@mui/icons-material'; // Import Logout icon from Material-UI
 
 const Nav = styled(motion.nav)`
   background-color: #333;
@@ -13,6 +14,7 @@ const NavList = styled.ul`
   padding: 0;
   display: flex;
   justify-content: center;
+  align-items: center; /* Align items vertically */
 `;
 
 const NavItem = styled(motion.li)`
@@ -28,6 +30,21 @@ const NavLink = styled(Link)`
 
   &:hover {
     background-color: #555;
+  }
+`;
+
+const LogoutButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: rotate(360deg); /* Spin on hover */
   }
 `;
 
@@ -49,6 +66,11 @@ const Navbar = () => {
           <NavLink to="/balance">Balance</NavLink>
         </NavItem>
         {/* Add more NavItem and NavLink for other pages */}
+        <NavItem>
+          <LogoutButton>
+            <Logout />
+          </LogoutButton>
+        </NavItem>
       </NavList>
     </Nav>
   );
