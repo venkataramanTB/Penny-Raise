@@ -34,7 +34,7 @@ const SignupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form data:', formData);
+    sessionStorage.setItem('formData', JSON.stringify(formData)); // Store form data in sessionStorage
     navigate('/');
   };
 
