@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { TransactionContext } from '../context/TransactionContext';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -23,7 +22,15 @@ const TransactionItem = styled.li`
 `;
 
 const TransactionPage = () => {
-  const { transactions } = useContext(TransactionContext);
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    // Retrieve transaction data from session storage
+    const storedTransactions = sessionStorage.getItem('transactions');
+    if (storedTransactions) {
+      setTransactions(JSON.parse(storedTransactions));
+    }
+  }, []);
 
   return (
     <Container>

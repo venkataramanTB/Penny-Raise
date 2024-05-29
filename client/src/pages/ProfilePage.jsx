@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import styled from 'styled-components';
 
@@ -13,12 +13,35 @@ const Container = styled.div`
 
 const ProfilePage = () => {
   const { user } = useContext(AuthContext);
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // Retrieve user data from session storage
+    const userDataFromSessionStorage = sessionStorage.getItem('LoggedInUser');
+    if (userDataFromSessionStorage) {
+      setUserData(JSON.parse(userDataFromSessionStorage));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Update user data in session storage whenever user changes
+    if (user) {
+      setUserData(user);
+      sessionStorage.setItem('LoggedInUser', JSON.stringify(user));
+    }
+  }, [user]);
 
   return (
     <Container>
       <h2>Profile</h2>
-      <p>Email: {user?.email}</p>
-      {/* Add more profile information as needed */}
+      {userData ? (
+        <>
+          <p>Email: {userData.email}</p>
+          {/* Add more profile information as needed */}
+        </>
+      ) : (
+        <p>Loading...</p>
+      )}
     </Container>
   );
 };

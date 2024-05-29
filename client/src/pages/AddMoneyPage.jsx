@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { TransactionContext } from '../context/TransactionContext';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -17,9 +17,26 @@ const AddMoneyPage = () => {
   const [amount, setAmount] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const storedBalance = sessionStorage.getItem('balance');
+    if (storedBalance) {
+      // Set the initial value of amount to the stored balance
+      setAmount(parseFloat(storedBalance));
+    }
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    setTransactions(prev => [...prev, { type: 'credit', amount: parseFloat(amount) }]);
+    const newAmount = parseFloat(amount);
+    const storedBalance = sessionStorage.getItem('balance');
+    const currentBalance = storedBalance ? parseFloat(storedBalance) : 0;
+    const updatedBalance = currentBalance + newAmount;
+
+    // Update the balance in session storage
+    sessionStorage.setItem('balance', updatedBalance);
+
+    // Add the transaction to the context
+    setTransactions(prev => [...prev, { type: 'credit', amount: newAmount }]);
     navigate('/balance');
   };
 
@@ -38,4 +55,5 @@ const AddMoneyPage = () => {
     </Container>
   );
 };
+
 export default AddMoneyPage;
