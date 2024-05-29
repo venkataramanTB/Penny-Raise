@@ -8,17 +8,15 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import PersonIcon from '@mui/icons-material/Person';
 import BadgeIcon from '@mui/icons-material/Badge';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import LogoutIcon from '@mui/icons-material/Logout'; // Import Logout icon
 import anime from 'animejs/lib/anime.es.js'; // Import anime.js
 
 const Container = styled.div`
   max-width: 600px;
-  margin: 50px auto;
+  margin: 50px auto; /* Center the dashboard */
   padding: 20px;
   background: white;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  position: relative; /* Position relative for logout button positioning */
 `;
 
 const TitleContainer = styled.div`
@@ -50,19 +48,6 @@ const NeonOutlineIcon = styled(ListItemIcon)`
   }
 `;
 
-const LogoutButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  color: #3498db;
-  transition: color 0.3s;
-
-  &:hover {
-    color: #ff0000;
-  }
-`;
-
 const DashboardPage = () => {
   const navigate = useNavigate(); // Initialize useNavigate hook
 
@@ -76,19 +61,10 @@ const DashboardPage = () => {
     });
   };
 
-  // Function to handle logout
-  const handleLogout = () => {
-    sessionStorage.clear(); // Clear sessionStorage on logout
-    navigate('/'); // Navigate to '/' after logout
-  };
-
   return (
     <Container>
       <TitleContainer>
         <h2>Dashboard</h2>
-        <LogoutButton onClick={handleLogout}>
-          <LogoutIcon />
-        </LogoutButton>
       </TitleContainer>
       <List>
         <StyledLink to="/transactions">
