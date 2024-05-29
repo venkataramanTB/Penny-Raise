@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import styled from 'styled-components';
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -8,6 +8,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import PersonIcon from '@mui/icons-material/Person';
 import BadgeIcon from '@mui/icons-material/Badge';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import LogoutIcon from '@mui/icons-material/Logout'; // Import Logout icon
 import anime from 'animejs/lib/anime.es.js'; // Import anime.js
 
 const Container = styled.div`
@@ -17,6 +18,14 @@ const Container = styled.div`
   background: white;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative; /* Position relative for logout button positioning */
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 `;
 
 const StyledLink = styled(Link)`
@@ -41,7 +50,22 @@ const NeonOutlineIcon = styled(ListItemIcon)`
   }
 `;
 
+const LogoutButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  color: #3498db;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #ff0000;
+  }
+`;
+
 const DashboardPage = () => {
+  const navigate = useNavigate(); // Initialize useNavigate hook
+
   // Function to handle click animation
   const handleClick = () => {
     anime({
@@ -52,9 +76,20 @@ const DashboardPage = () => {
     });
   };
 
+  // Function to handle logout
+  const handleLogout = () => {
+    sessionStorage.clear(); // Clear sessionStorage on logout
+    navigate('/'); // Navigate to '/' after logout
+  };
+
   return (
     <Container>
-      <h2>Dashboard</h2>
+      <TitleContainer>
+        <h2>Dashboard</h2>
+        <LogoutButton onClick={handleLogout}>
+          <LogoutIcon />
+        </LogoutButton>
+      </TitleContainer>
       <List>
         <StyledLink to="/transactions">
           <ListItem button className="menu-item" onClick={handleClick}>
