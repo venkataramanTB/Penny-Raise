@@ -16,12 +16,29 @@ const LoginPage = () => {
   const { setUser } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setUser({ email });
-    navigate('/dashboard');
+
+    // Define valid credentials
+    const validCredentials = [
+      { email: 'venky', password: '1234' },
+      { email: 'sara', password: '1234' }
+    ];
+
+    // Check if entered credentials match any of the valid credentials
+    const isValidUser = validCredentials.some(
+      (user) => user.email === email && user.password === password
+    );
+
+    if (isValidUser) {
+      setUser({ email });
+      navigate('/dashboard');
+    } else {
+      setError('Invalid email or password');
+    }
   };
 
   return (
@@ -29,7 +46,7 @@ const LoginPage = () => {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
-          type="email"
+          type="text"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -41,6 +58,7 @@ const LoginPage = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Login</button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
     </Container>
   );
