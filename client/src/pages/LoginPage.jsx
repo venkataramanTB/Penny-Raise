@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -38,6 +38,14 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const loggedInUser = sessionStorage.getItem('LoggedIn');
+    if (loggedInUser) {
+      setUser({ email: loggedInUser });
+      navigate('/dashboard');
+    }
+  }, [navigate, setUser]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -54,6 +62,7 @@ const LoginPage = () => {
 
     if (isValidUser) {
       setUser({ email });
+      sessionStorage.setItem('LoggedIn', email);
       navigate('/dashboard');
     } else {
       setError('Invalid email or password');
