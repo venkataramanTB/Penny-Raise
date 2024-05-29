@@ -1,9 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`;
 
 const DashboardPage = () => {
   return (
-    <div>
+    <Container>
       <h2>Dashboard</h2>
       <nav>
         <ul>
@@ -15,7 +25,7 @@ const DashboardPage = () => {
           <li><Link to="/badges">View Badges</Link></li>
         </ul>
       </nav>
-    </div>
+    </Container>
   );
 };
 
