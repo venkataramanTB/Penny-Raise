@@ -65,7 +65,6 @@ const Navbar = () => {
         <NavItem whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
           <NavLink to="/balance">Balance</NavLink>
         </NavItem>
-        {/* Add more NavItem and NavLink for other pages */}
         <NavItem>
           <LogoutButton>
             <Logout />
