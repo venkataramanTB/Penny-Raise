@@ -48,14 +48,10 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Define valid credentials
     const validCredentials = [
       { email: 'venky', password: '1234' },
       { email: 'sara', password: '1234' }
     ];
-
-    // Check if entered credentials match any of the valid credentials
     const isValidUser = validCredentials.some(
       (user) => user.email === email && user.password === password
     );
