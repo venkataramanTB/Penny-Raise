@@ -34,11 +34,10 @@ const SignupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    sessionStorage.setItem('formData', JSON.stringify(formData)); // Store form data in sessionStorage
+    sessionStorage.setItem('formData', JSON.stringify(formData)); 
     navigate('/');
   };
 
-  // Animation on mount
   React.useEffect(() => {
     anime({
       targets: '#signup-form',

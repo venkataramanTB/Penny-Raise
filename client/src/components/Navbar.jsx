@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Logout } from '@mui/icons-material'; // Import Logout icon from Material-UI
@@ -44,11 +44,16 @@ const LogoutButton = styled.button`
   transition: transform 0.3s;
 
   &:hover {
-    transform: rotate(360deg); /* Spin on hover */
+    transform: rotate(360deg); 
   }
 `;
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    window.sessionStorage.clear();
+    navigate('/');
+  };
   return (
     <Nav
       initial={{ opacity: 0, y: -20 }}
@@ -66,7 +71,7 @@ const Navbar = () => {
           <NavLink to="/balance">Balance</NavLink>
         </NavItem>
         <NavItem>
-          <LogoutButton>
+          <LogoutButton onClick={handleLogout}>
             <Logout />
           </LogoutButton>
         </NavItem>
