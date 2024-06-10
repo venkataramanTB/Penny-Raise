@@ -27,25 +27,17 @@ const BalancePage = () => {
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    // Retrieve balance from session storage
-    const storedBalance = sessionStorage.getItem('balance');
-    if (storedBalance) {
-      setBalance(parseFloat(storedBalance));
+    const loggedInUser = sessionStorage.getItem('LoggedIn');
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      setBalance(user.balance);
     }
   }, []);
-
-  useEffect(() => {
-    // Recalculate balance whenever transactions change
-    const newBalance = transactions.reduce((acc, transaction) => acc + transaction.amount, 0);
-    setBalance(newBalance);
-    // Update balance in session storage
-    sessionStorage.setItem('balance', newBalance);
-  }, [transactions]);
 
   return (
     <Container>
       <h2>Balance</h2>
-      <p>Your current balance is: ${balance}</p>
+      <p>Your current balance is: ₹{balance}</p>
       <BackButton to="/dashboard">Back to Dashboard</BackButton>
     </Container>
   );

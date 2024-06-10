@@ -16,7 +16,6 @@ const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // Retrieve user data from session storage
     const userDataFromSessionStorage = sessionStorage.getItem('LoggedInUser');
     if (userDataFromSessionStorage) {
       setUserData(JSON.parse(userDataFromSessionStorage));
@@ -24,7 +23,6 @@ const ProfilePage = () => {
   }, []);
 
   useEffect(() => {
-    // Update user data in session storage whenever user changes
     if (user) {
       setUserData(user);
       sessionStorage.setItem('LoggedInUser', JSON.stringify(user));
@@ -37,7 +35,14 @@ const ProfilePage = () => {
       {userData ? (
         <>
           <p>Email: {userData.email}</p>
-          {/* Add more profile information as needed */}
+          <p>Username: {userData.username}</p>
+          <p>First Name: {userData.first_name}</p>
+          <p>Last Name: {userData.last_name}</p>
+          <p>Phone Number: {userData.phone_number}</p>
+          <p>Age: {userData.age}</p>
+          <p>Salary: {userData.salary}</p>
+          <p>Job Role: {userData.job_role}</p>
+          <p>Company Name: {userData.company_name}</p>
         </>
       ) : (
         <p>Loading...</p>

@@ -19,10 +19,15 @@ const SignupPage = () => {
     phoneNumber: '',
     age: '',
     salary: '',
+    balance: '',  // Added balance field
     jobRole: '',
-    companyName: ''
+    companyName: '',
+    password: ''
   });
-  
+
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -32,10 +37,33 @@ const SignupPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    sessionStorage.setItem('formData', JSON.stringify(formData)); 
-    navigate('/');
+    setError('');
+    setSuccessMessage('');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSuccessMessage(data.message);
+        sessionStorage.setItem('LoggedIn', JSON.stringify(formData));
+        navigate('/');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error);
+      }
+    } catch (err) {
+      console.error('Error signing up:', err);
+      setError('An unexpected error occurred. Please try again later.');
+    }
   };
 
   React.useEffect(() => {
@@ -62,6 +90,8 @@ const SignupPage = () => {
         <Typography variant="h4" component="h2" gutterBottom>
           Signup
         </Typography>
+        {error && <Typography color="error">{error}</Typography>}
+        {successMessage && <Typography color="primary">{successMessage}</Typography>}
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
@@ -131,6 +161,16 @@ const SignupPage = () => {
             required
           />
           <TextField
+            fullWidth
+            margin="normal"
+            label="Balance"  // Added balance input field
+            name="balance"
+            type="number"
+            value={formData.balance}
+            onChange={handleChange}
+            required
+          />
+          <TextField
             select
             fullWidth
             margin="normal"
@@ -151,6 +191,16 @@ const SignupPage = () => {
             label="Company Name"
             name="companyName"
             value={formData.companyName}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Password"
+            name="password"
+            type="password"
+            value={formData.password}
             onChange={handleChange}
             required
           />

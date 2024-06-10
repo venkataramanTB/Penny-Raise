@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -38,30 +38,29 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const loggedInUser = sessionStorage.getItem('LoggedIn');
-    if (loggedInUser) {
-      setUser({ email: loggedInUser });
-      navigate('/dashboard');
-    }
-  }, [navigate, setUser]);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const validCredentials = [
-      { email: 'venky', password: '1234' },
-      { email: 'sara', password: '1234' }
-    ];
-    const isValidUser = validCredentials.some(
-      (user) => user.email === email && user.password === password
-    );
 
-    if (isValidUser) {
-      setUser({ email });
-      sessionStorage.setItem('LoggedIn', email);
-      navigate('/dashboard');
-    } else {
-      setError('Invalid email or password');
+    try {
+      const response = await fetch(`http://localhost:5000/api/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+        sessionStorage.setItem('LoggedIn', JSON.stringify(data.user));
+        navigate('/dashboard');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error);
+      }
+    } catch (err) {
+      console.error('Error logging in:', err);
+      setError('An unexpected error occurred. Please try again later.');
     }
   };
 
