@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Container, Typography, List, ListItem, Divider, Paper, Button, Pagination } from '@mui/material';
 import anime from 'animejs/lib/anime.es.js';
+import axios from 'axios';
 
 const TransactionPage = () => {
   const [transactions, setTransactions] = useState([]);
@@ -9,11 +10,21 @@ const TransactionPage = () => {
   const listRef = useRef(null);
 
   useEffect(() => {
-    const loggedInUser = sessionStorage.getItem('LoggedIn');
-    if (loggedInUser) {
-      const user = JSON.parse(loggedInUser);
-      setTransactions(user.transactions || []);
-    }
+    const fetchTransactions = async () => {
+      const loggedInUser = sessionStorage.getItem('LoggedIn');
+      if (loggedInUser) {
+        const user = JSON.parse(loggedInUser);
+        try {
+          const response = await axios.get('http://localhost:5000/api/transactions', {
+            params: { email: user.email }
+          });
+          setTransactions(response.data);
+        } catch (error) {
+          console.error('Error fetching transactions:', error);
+        }
+      }
+    };
+    fetchTransactions();
   }, []);
 
   useEffect(() => {
