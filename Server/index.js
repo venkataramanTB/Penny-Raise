@@ -1,4 +1,4 @@
-require('dotenv').config(); 
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const { executeQuery } = require("./db");
@@ -14,7 +14,7 @@ app.post('/api/signup', async (req, res) => {
   try {
     const { firstName, lastName, username, email, phoneNumber, age, salary, balance, jobRole, companyName, password } = req.body;
 
-    const result = await executeQuery(`
+    await executeQuery(`
       INSERT INTO users (first_name, last_name, username, email, phone_number, age, salary, balance, job_role, company_name, password)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [firstName, lastName, username, email, phoneNumber, age, salary, balance, jobRole, companyName, password]);
@@ -26,12 +26,10 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-
 app.get('/api/login', async (req, res) => {
   try {
-    const { email, password } = req.query;  // Use req.query for GET parameters
+    const { email, password } = req.query;
 
-    // Ensure email and password are not undefined
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
     }
@@ -50,7 +48,61 @@ app.get('/api/login', async (req, res) => {
   }
 });
 
+app.post('/api/transactions', async (req, res) => {
+  try {
+    const { email, description, amount, type } = req.body;
+    const parsedAmount = parseFloat(amount);
+
+    const userResult = await executeQuery(`
+      SELECT balance FROM users WHERE email = ?
+    `, [email]);
+
+    if (userResult.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const user = userResult[0];
+    const currentBalance = parseFloat(user.balance) || 0;
+    const newBalance = type === 'debit' ? currentBalance - parsedAmount : currentBalance + parsedAmount;
+
+    await executeQuery(`
+      INSERT INTO transactions (user_email, description, amount, type)
+      VALUES (?, ?, ?, ?)
+    `, [email, description, parsedAmount, type]);
+
+    await executeQuery(`
+      UPDATE users SET balance = ? WHERE email = ?
+    `, [newBalance, email]);
+
+    res.json({ message: 'Transaction added and balance updated' });
+  } catch (error) {
+    console.error('Error adding transaction:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+app.get('/api/transactions', async (req, res) => {
+  try {
+    const { email } = req.query;
+
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+
+    const transactions = await executeQuery(`
+      SELECT description, amount, type, created_at
+      FROM transactions
+      WHERE user_email = ?
+      ORDER BY created_at DESC
+    `, [email]);
+
+    res.json(transactions);
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

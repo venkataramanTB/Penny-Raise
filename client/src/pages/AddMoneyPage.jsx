@@ -18,9 +18,8 @@ const AddMoneyPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedBalance = sessionStorage.getItem('balance');
-    if (storedBalance) {
-      // Set the initial value of amount to the stored balance
+    const storedBalance = sessionStorage.getItem('LoggedIn');
+    if (storedBalance.balance) {
       setAmount(parseFloat(storedBalance));
     }
   }, []);
@@ -31,11 +30,7 @@ const AddMoneyPage = () => {
     const storedBalance = sessionStorage.getItem('balance');
     const currentBalance = storedBalance ? parseFloat(storedBalance) : 0;
     const updatedBalance = currentBalance + newAmount;
-
-    // Update the balance in session storage
     sessionStorage.setItem('balance', updatedBalance);
-
-    // Add the transaction to the context
     setTransactions(prev => [...prev, { type: 'credit', amount: newAmount }]);
     navigate('/balance');
   };

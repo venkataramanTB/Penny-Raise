@@ -17,18 +17,22 @@ const TransactionPage = () => {
   }, []);
 
   useEffect(() => {
-    animateTransactions();
+    if (transactions.length > 0) {
+      animateTransactions();
+    }
   }, [transactions]);
 
   const animateTransactions = () => {
-    anime({
-      targets: listRef.current.children,
-      opacity: [0, 1],
-      translateY: [20, 0],
-      duration: 500,
-      easing: 'easeInOutQuad',
-      delay: anime.stagger(100)
-    });
+    if (listRef.current) {
+      anime({
+        targets: listRef.current.children,
+        opacity: [0, 1],
+        translateY: [20, 0],
+        duration: 500,
+        easing: 'easeInOutQuad',
+        delay: anime.stagger(100)
+      });
+    }
   };
 
   const handleChangePage = (event, newPage) => {
@@ -50,7 +54,7 @@ const TransactionPage = () => {
             <React.Fragment key={index}>
               <ListItem style={{ opacity: 0, transform: 'translateY(20px)' }}>
                 <Typography variant="subtitle1">{transaction.description}</Typography>
-                <Typography variant="subtitle1" sx={{ ml: 'auto' }}>
+                <Typography variant="subtitle1" sx={{ ml: 'auto', color: transaction.amount >= 0 ? 'green' : 'red' }}>
                   ₹{transaction.amount}
                 </Typography>
               </ListItem>
