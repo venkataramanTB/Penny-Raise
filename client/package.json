@@ -14,6 +14,8 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.19",
     "@mui/material": "^5.15.19",
+    "@react-three/drei": "^9.106.0",
+    "@react-three/fiber": "^8.16.8",
     "animejs": "^3.2.2",
     "axios": "^1.7.2",
     "framer-motion": "^11.2.10",
@@ -23,7 +25,8 @@
     "react-router-dom": "^6.23.1",
     "react-spring": "^9.7.3",
     "react-toastify": "^10.0.5",
-    "styled-components": "^6.1.11"
+    "styled-components": "^6.1.11",
+    "three": "^0.165.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
