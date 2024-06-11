@@ -74,12 +74,13 @@ app.post('/api/transactions', async (req, res) => {
       UPDATE users SET balance = ? WHERE email = ?
     `, [newBalance, email]);
 
-    res.json({ message: 'Transaction added and balance updated' });
+    res.json({ message: 'Transaction added and balance updated', newBalance });
   } catch (error) {
     console.error('Error adding transaction:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 app.get('/api/transactions', async (req, res) => {
   try {
     const { email } = req.query;
@@ -101,7 +102,6 @@ app.get('/api/transactions', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

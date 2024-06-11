@@ -8,6 +8,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
+import axios from 'axios';
 
 const AddTransactionPage = () => {
   const { transactions, setTransactions } = useContext(TransactionContext);
@@ -16,23 +17,40 @@ const AddTransactionPage = () => {
   const [amount, setAmount] = useState('');
   const [type, setType] = useState('credit'); 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const parsedAmount = parseFloat(amount);
     const newTransaction = {
       description,
-      amount: type === 'debit' ? -parsedAmount : parsedAmount
+      amount: parsedAmount,
+      type,
     };
-    setTransactions([...transactions, newTransaction]);
+
     const loggedInUser = sessionStorage.getItem('LoggedIn');
     if (loggedInUser) {
       const user = JSON.parse(loggedInUser);
-      const currentBalance = parseFloat(user.balance) || 0; // Convert balance to float
-      user.transactions = [...(user.transactions || []), newTransaction];
-      user.balance = currentBalance + newTransaction.amount; // Calculate new balance
-      sessionStorage.setItem('LoggedIn', JSON.stringify(user));
+
+      try {
+        const response = await axios.post('http://localhost:5000/api/transactions', {
+          email: user.email,
+          description,
+          amount: parsedAmount,
+          type,
+        });
+
+        const { newBalance } = response.data;
+
+        user.transactions = [...(user.transactions || []), newTransaction];
+        user.balance = newBalance; 
+
+        sessionStorage.setItem('LoggedIn', JSON.stringify(user));
+        setTransactions([...transactions, newTransaction]);
+
+        navigate('/transactions');
+      } catch (error) {
+        console.error('Error adding transaction:', error);
+      }
     }
-    navigate('/transactions');
   };
 
   return (
