@@ -9,15 +9,14 @@ const TransactionPage = () => {
   const listRef = useRef(null);
 
   useEffect(() => {
-    // Retrieve transaction data from session storage
-    const storedTransactions = sessionStorage.getItem('transactions');
-    if (storedTransactions) {
-      setTransactions(JSON.parse(storedTransactions));
+    const loggedInUser = sessionStorage.getItem('LoggedIn');
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      setTransactions(user.transactions || []);
     }
   }, []);
 
   useEffect(() => {
-    // Run animation when transactions are updated
     animateTransactions();
   }, [transactions]);
 
@@ -52,7 +51,7 @@ const TransactionPage = () => {
               <ListItem style={{ opacity: 0, transform: 'translateY(20px)' }}>
                 <Typography variant="subtitle1">{transaction.description}</Typography>
                 <Typography variant="subtitle1" sx={{ ml: 'auto' }}>
-                  ${transaction.amount}
+                  ₹{transaction.amount}
                 </Typography>
               </ListItem>
               {index !== currentTransactions.length - 1 && <Divider />}

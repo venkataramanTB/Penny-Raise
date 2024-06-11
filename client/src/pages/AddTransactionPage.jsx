@@ -14,35 +14,24 @@ const AddTransactionPage = () => {
   const navigate = useNavigate();
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
-  const [type, setType] = useState('credit'); // Default transaction type is credit
+  const [type, setType] = useState('credit'); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const parsedAmount = parseFloat(amount);
     const newTransaction = {
       description,
-      amount: type === 'debit' ? -parsedAmount : parsedAmount // If type is debit, negate the amount
+      amount: type === 'debit' ? -parsedAmount : parsedAmount
     };
-
-    // Update transactions context
     setTransactions([...transactions, newTransaction]);
-
-    // Update balance in session storage based on transaction type
-    const storedBalance = sessionStorage.getItem('balance');
-    let updatedBalance = storedBalance ? parseFloat(storedBalance) : 0;
-    if (type === 'debit') {
-      updatedBalance -= parsedAmount;
-    } else {
-      updatedBalance += parsedAmount;
+    const loggedInUser = sessionStorage.getItem('LoggedIn');
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      const currentBalance = parseFloat(user.balance) || 0; // Convert balance to float
+      user.transactions = [...(user.transactions || []), newTransaction];
+      user.balance = currentBalance + newTransaction.amount; // Calculate new balance
+      sessionStorage.setItem('LoggedIn', JSON.stringify(user));
     }
-    sessionStorage.setItem('balance', updatedBalance.toString());
-
-    // Save transaction details in session storage
-    const storedTransactions = JSON.parse(sessionStorage.getItem('transactions')) || [];
-    const updatedTransactions = [...storedTransactions, newTransaction];
-    sessionStorage.setItem('transactions', JSON.stringify(updatedTransactions));
-
-    // Navigate to transactions page
     navigate('/transactions');
   };
 
@@ -77,7 +66,9 @@ const AddTransactionPage = () => {
             <MenuItem value="debit">Debit</MenuItem>
           </Select>
         </FormControl>
-        <Button type="submit" variant="contained" color="primary">Add</Button>
+        <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+          Add
+        </Button>
       </form>
     </Container>
   );
