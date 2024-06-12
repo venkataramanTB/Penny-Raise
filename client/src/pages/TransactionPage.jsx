@@ -62,11 +62,17 @@ const TransactionPage = () => {
       <Paper elevation={3} sx={{ borderRadius: '10px', marginBottom: '20px' }}>
         <List ref={listRef}>
           {currentTransactions.map((transaction, index) => (
-            <React.Fragment key={index}>
+            <React.Fragment key={transaction.id}>
               <ListItem style={{ opacity: 0, transform: 'translateY(20px)' }}>
                 <Typography variant="subtitle1">{transaction.description}</Typography>
-                <Typography variant="subtitle1" sx={{ ml: 'auto', color: transaction.amount >= 0 ? 'green' : 'red' }}>
-                  ₹{transaction.amount}
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    ml: 'auto',
+                    color: transaction.type === 'credit' ? 'green' : 'red',
+                  }}
+                >
+                  {transaction.type === 'credit' ? `+₹${transaction.amount}` : `-₹${Math.abs(transaction.amount)}`}
                 </Typography>
               </ListItem>
               {index !== currentTransactions.length - 1 && <Divider />}
